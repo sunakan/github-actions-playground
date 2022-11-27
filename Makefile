@@ -2,6 +2,14 @@
 setup: ## 開発環境を setup
 	@bash scripts/setup.sh
 
+.PHONY: lint.full
+lint.full: ## 全ての lint をかける ( pr は最後 )
+	@make lint.gh-action
+	@make lint.yaml
+	@make lint.shell
+	@make lint.commit-msgs
+	@make lint.pr
+
 .PHONY: lint.pr
 lint.pr: ## GitHub の PR を lint
 	@bash scripts/lint-current-branch-pull-request.sh
