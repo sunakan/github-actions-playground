@@ -31,7 +31,7 @@ function commitlintPRTitle() {
   echo '👮 Lint: commitlint PR title'
   echo '---------------------------------------------------'
 
-  cat "$PULL_REQUEST_TITLE_TEXT_PATH" | npx commitlint
+  npx commitlint < "$PULL_REQUEST_TITLE_TEXT_PATH"
 }
 
 ################################################################################
@@ -91,8 +91,10 @@ function reportResult() {
     echo '[textlint PR title/body]'
     echo '👺 指摘された commit message を修正してください'
     echo 'Try to run: 以下のコマンドを試して diff をとって参考にしてください'
-    readonly pr_title_text_backup_path="$(echo $PULL_REQUEST_TITLE_TEXT_PATH | sed 's/md$/bk.md/g')"
-    readonly pr_body_text_backup_path="$(echo $PULL_REQUEST_BODY_TEXT_PATH | sed 's/md$/bk.md/g')"
+    pr_title_text_backup_path="${PULL_REQUEST_TITLE_TEXT_PATH//%md/bk.md}"
+    pr_body_text_backup_path="${PULL_REQUEST_BODY_TEXT_PATH//%md/bk.md}"
+    readonly pr_title_text_backup_path
+    readonly pr_body_text_backup_path
     echo '```'
     echo "cp $PULL_REQUEST_TITLE_TEXT_PATH $pr_title_text_backup_path"
     echo "cp $PULL_REQUEST_BODY_TEXT_PATH $pr_body_text_backup_path"
@@ -133,7 +135,8 @@ PR BODY:  長くなるので、載せません
 COMMAND_BEGIN
 
 if [ "$pr_title" = "" ]; then
-  readonly current_branch_name=$(git rev-parse --abbrev-ref HEAD)
+  current_branch_name="$(git rev-parse --abbrev-ref HEAD)"
+  readonly current_branch_name
   echo "現在の ${current_branch_name} ブランチの PR はまだ作成していません"
   echo 'lint を skip します'
   exit 0
