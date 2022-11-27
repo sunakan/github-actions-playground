@@ -51,3 +51,22 @@ jobs:
           reporter: github-pr-review
           filter_mode: diff_context  # 差分のみ(default: added)
           fail_on_error: 'true'  # errorが出たら落ちる(default: 'false')
+
+  #
+  # Lint Shell
+  #
+  lint-shell:
+    name: Lint shell
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v3
+      - name: shellcheck
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          path: "."
+          pattern: "*.sh"
+          exclude: "./.git/*"
+          check_all_files_with_shebangs: "false"  # パターンに関係なくシェバンを持つファイルのチェックをするかどうか

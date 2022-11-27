@@ -10,10 +10,6 @@ lint.pr: ## GitHub の PR を lint
 lint.commit-msgs: ## git commit messages を lint
 	@bash scripts/lint-git-commit-messages.sh
 
-.PHONY: lint.shell
-lint.shell: ## shell script を lint
-	docker run --rm --mount type=bind,source=${PWD}/,target=/mnt koalaman/shellcheck:stable **/*.sh
-
 .PHONY: lint.gh-action
 lint.gh-action: ## Github Action を lint
 	docker run --rm --mount type=bind,source=${PWD},target=/repo --workdir /repo rhysd/actionlint:latest -color
@@ -21,6 +17,10 @@ lint.gh-action: ## Github Action を lint
 .PHONY: lint.yaml
 lint.yaml: ## YAML ファイルを lint
 	docker run --rm -it --mount type=bind,source=${PWD}/,target=/code/ pipelinecomponents/yamllint yamllint .
+
+.PHONY: lint.shell
+lint.shell: ## shell script を lint
+	docker run --rm --mount type=bind,source=${PWD}/,target=/mnt koalaman/shellcheck:stable **/*.sh
 
 ################################################################################
 # Utility-Command help
