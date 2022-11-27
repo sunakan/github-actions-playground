@@ -8,6 +8,7 @@ lint.full: ## 全ての lint をかける ( pr は最後 )
 	@make lint.yaml
 	@make lint.shell
 	@make lint.es
+	@make lint.md
 	@make lint.commit-msgs
 	@make lint.pr
 
@@ -34,6 +35,10 @@ lint.shell: ## shell script を lint
 .PHONY: lint.es
 lint.es: ## ECMAScript を lint
 	@npx eslint .
+
+.PHONY: lint.md
+lint.md: ## ECMAScript を lint
+	@npx textlint --config ./.textlintrc.js README.md
 
 ################################################################################
 # Utility-Command help
