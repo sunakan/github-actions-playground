@@ -7,10 +7,11 @@
 # 概要
 # - git commit message に対して lint
 #
-# DI
+# CI時のDI対象
 #
 # - FROM_COMMIT_ID: lint 対象の commit message の from
 # - TO_COMMIT_ID: lint 対象の commit message の to
+# - CURRENT_BRANCH_NAME: commit message を置くディレクトリ名に利用
 #
 
 WORKING_DIR_PATH="$(pwd)"
