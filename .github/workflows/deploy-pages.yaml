@@ -2,21 +2,21 @@
 # ドキュメントを GitHub Pages に deploy する
 #
 ---
-name: deploy docs
+name: Deploy docs
 
 'on':
   push:
+#  workflow_run:
+#    workflows:
+#      - Lint
+#    types:
+#      - completed
 
 jobs:
   #
   # 静的ページを build
   #
   build:
-    needs:
-      - lint-yaml
-      - lint-shell
-      - eslint
-      - textlint
     runs-on: ubuntu-latest
     steps:
       - name: リポジトリのチェックアウト
@@ -47,7 +47,8 @@ jobs:
       id-token: write
     environment:
       name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: 成果物 ( アーティファクト ) を GitHub Pages にデプロイ
-        run: |
-          echo 'uses: actions/deploy-pages@v1'
+        id: deployment
+        uses: actions/deploy-pages@v1
