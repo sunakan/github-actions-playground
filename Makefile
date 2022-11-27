@@ -7,6 +7,7 @@ lint.full: ## 全ての lint をかける ( pr は最後 )
 	@make lint.gh-action
 	@make lint.yaml
 	@make lint.shell
+	@make lint.es
 	@make lint.commit-msgs
 	@make lint.pr
 
@@ -29,6 +30,10 @@ lint.yaml: ## YAML ファイルを lint
 .PHONY: lint.shell
 lint.shell: ## shell script を lint
 	docker run --rm --mount type=bind,source=${PWD}/,target=/mnt koalaman/shellcheck:stable **/*.sh
+
+.PHONY: lint.es
+lint.es: ## ECMAScript を lint
+	@npx eslint .
 
 ################################################################################
 # Utility-Command help
