@@ -4,7 +4,7 @@ setup: ## 開発環境を setup
 
 .PHONY: lint.for-commit-msgs
 lint.commit-msgs: ## git commit messages を lint
-	@echo 'TODO( コミットメッセージを lint する script の用意 )'
+	@bash scripts/lint-git-commit-messages.sh
 
 ################################################################################
 # Utility-Command help

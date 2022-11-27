@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#
+# githook pre-push
+#
+# 概要
+# - git push の直前に実行される script
+#
+
+make lint.commit-msgs

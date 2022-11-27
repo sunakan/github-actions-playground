@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#
+# githook post-commit
+#
+# 概要
+# - git commit の直後に実行される script
+#
+
+make lint.commit-msgs
