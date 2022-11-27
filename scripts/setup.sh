@@ -16,12 +16,26 @@ function setupGitCommitMessageTemplate() {
 }
 
 ################################################################################
+# npm 依存の解決 ( textlint 等が入る )
+################################################################################
+function resolveNpmDependencies() {
+  echo '🚀 Resolve npm dependencies'
+  echo '---------------------------------------------------'
+
+  npm install
+
+  echo '✅ Done: resolve npm dependencies'
+  echo ''
+}
+
+################################################################################
 # main
 ################################################################################
 function main() {
   echo ''
 
   setupGitCommitMessageTemplate
+  resolveNpmDependencies
 }
 
 cat << COMMAND_BEGIN
