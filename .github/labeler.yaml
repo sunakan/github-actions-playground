@@ -1,0 +1,18 @@
+#
+# actions/labeler 用
+#
+# GitHub
+# - https://github.com/actions/labeler
+#
+# ラベルの重複は許容
+#
+
+#
+# document
+#
+# ドキュメント系
+#
+document:
+  - '*.md'
+  - '*.mdx'
+  - 'docs/*'
