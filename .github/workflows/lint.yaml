@@ -1,0 +1,109 @@
+#
+# Lint
+#
+# 主に reviewdog に指摘してもらう
+#
+---
+
+name: Lint
+
+#
+# 'on' にしている理由
+# yamllintで怒られるため
+#
+# 参考: https://github.com/adrienverge/yamllint/issues/430
+#
+'on':
+  pull_request:
+
+jobs:
+  #
+  # Lint GitHub Action
+  #
+  lint-github-action:
+    name: Lint github action
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v3
+      - name: actionlint
+        uses: reviewdog/action-actionlint@v1
+
+  #
+  # Lint YAML
+  #
+  lint-yaml:
+    name: Lint yaml
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v3
+      - name: reviewdogのセットアップ
+        uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: latest
+      - name: yamllint
+        uses: reviewdog/action-yamllint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          filter_mode: diff_context  # 差分のみ(default: added)
+          fail_on_error: 'true'  # errorが出たら落ちる(default: 'false')
+
+  #
+  # Lint Shell
+  #
+  lint-shell:
+    name: Lint shell
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v3
+      - name: shellcheck
+        uses: reviewdog/action-shellcheck@v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          reporter: github-pr-review
+          path: "."
+          pattern: "*.sh"
+          exclude: "./.git/*"
+          check_all_files_with_shebangs: "false"  # パターンに関係なくシェバンを持つファイルのチェックをするかどうか
+
+  #
+  # Lint ECMAScript
+  #
+  eslint:
+    name: Lint ECMA Script
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v3
+      - name: eslint
+        uses: reviewdog/action-eslint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+
+  #
+  # Lint Markdown text
+  #
+  textlint:
+    name: Lint markdown text
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v3
+      - name: nodejsのセットアップ
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: 依存ライブラリのインストール
+        run: npm install
+      - name: reviewdogのセットアップ
+        uses: reviewdog/action-setup@v1
+      - name: textlint README.md
+        run: npx textlint -f checkstyle --config ./.textlintrc.js README.md | reviewdog -f=checkstyle -reporter=github-pr-review -fail-on-error=true
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
