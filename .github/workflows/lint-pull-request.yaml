@@ -25,7 +25,7 @@ jobs:
         run: npm install
       - name: github-commentをインストール
         run: |
-          curl -sSfL -o github-comment.tar.gz https://github.com/suzuki-shunsuke/github-comment/releases/download/v${GITHUB_COMMENT_VERSION}/github-comment_${GITHUB_COMMENT_VERSION}_linux_amd64.tar.gz
+          curl -sSfL -o github-comment.tar.gz "https://github.com/suzuki-shunsuke/github-comment/releases/download/v${GITHUB_COMMENT_VERSION}/github-comment_${GITHUB_COMMENT_VERSION}_linux_amd64.tar.gz"
           echo 1da8cb9d52395018ec15f876347e204fe632c833baa1831ca36302dec1e0f97a  github-comment.tar.gz | sha256sum -c
           sudo tar -C /usr/bin -xzf ./github-comment.tar.gz
         env:
