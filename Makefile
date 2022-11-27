@@ -14,6 +14,10 @@ lint.commit-msgs: ## git commit messages を lint
 lint.shell: ## shell script を lint
 	docker run --rm --mount type=bind,source=${PWD}/,target=/mnt koalaman/shellcheck:stable **/*.sh
 
+.PHONY: lint.gh-action
+lint.gh-action: ## Github Action を lint
+	docker run --rm --mount type=bind,source=${PWD},target=/repo --workdir /repo rhysd/actionlint:latest -color
+
 ################################################################################
 # Utility-Command help
 ################################################################################
