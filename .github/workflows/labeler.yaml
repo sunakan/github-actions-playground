@@ -24,4 +24,4 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           sync-labels: true  # force push等で、途中で結局対象ではなくなったら、そのラベルを削除
-
+          configuration-path: .github/labeler.yaml
