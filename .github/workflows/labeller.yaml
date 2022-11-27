@@ -1,0 +1,27 @@
+#
+# labeler
+#
+# PRにラベルを付与
+---
+name: Labelling PR
+
+#
+# 'on' にしている理由
+# yamllintで怒られるため
+#
+# 参考: https://github.com/adrienverge/yamllint/issues/430
+#
+'on':
+  pull_request:
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: PRにラベルを付与
+        uses: actions/labeler@v4
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          sync-labels: true  # force push等で、途中で結局対象ではなくなったら、そのラベルを削除
+
