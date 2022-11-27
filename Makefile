@@ -2,7 +2,7 @@
 setup: ## 開発環境を setup
 	@bash scripts/setup.sh
 
-.PHONY: lint.for-commit-msgs
+.PHONY: lint.commit-msgs
 lint.commit-msgs: ## git commit messages を lint
 	@bash scripts/lint-git-commit-messages.sh
 
