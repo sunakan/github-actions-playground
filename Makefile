@@ -2,6 +2,10 @@
 setup: ## 開発環境を setup
 	@bash scripts/setup.sh
 
+.PHONY: lint.pr
+lint.pr: ## GitHub の PR を lint
+	@bash scripts/lint-current-branch-pull-request.sh
+
 .PHONY: lint.commit-msgs
 lint.commit-msgs: ## git commit messages を lint
 	@bash scripts/lint-git-commit-messages.sh
