@@ -29,3 +29,25 @@ jobs:
         uses: actions/checkout@v3
       - name: actionlint
         uses: reviewdog/action-actionlint@v1
+
+  #
+  # Lint YAML
+  #
+  lint-yaml:
+    name: Lint yaml
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v3
+      - name: reviewdogのセットアップ
+        uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: latest
+      - name: yamllint
+        uses: reviewdog/action-yamllint@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          reporter: github-pr-review
+          filter_mode: diff_context  # 差分のみ(default: added)
+          fail_on_error: 'true'  # errorが出たら落ちる(default: 'false')

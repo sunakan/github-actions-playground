@@ -1,0 +1,19 @@
+#
+# yamllintの設定
+#
+# - Default configuration
+#   - https://yamllint.readthedocs.io/en/stable/configuration.html#default-configuration
+#
+---
+
+extends: default
+
+rules:
+  line-length: disable  ## default: enable
+
+#
+# 無視するPATH
+#
+ignore: |
+  node_modules/*
+  tmp/*
