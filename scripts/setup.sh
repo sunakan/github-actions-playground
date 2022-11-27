@@ -29,6 +29,19 @@ function resolveNpmDependencies() {
 }
 
 ################################################################################
+# githooks
+################################################################################
+function setupGitHooks() {
+  echo '🚀 Setup githooks'
+  echo '---------------------------------------------------'
+
+  git config --local core.hooksPath .githooks
+
+  echo '✅ Done: setup githooks'
+  echo ''
+}
+
+################################################################################
 # main
 ################################################################################
 function main() {
@@ -36,6 +49,7 @@ function main() {
 
   setupGitCommitMessageTemplate
   resolveNpmDependencies
+  setupGitHooks
 }
 
 cat << COMMAND_BEGIN

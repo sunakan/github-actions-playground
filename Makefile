@@ -2,6 +2,10 @@
 setup: ## 開発環境を setup
 	@bash scripts/setup.sh
 
+.PHONY: lint.for-commit-msgs
+lint.commit-msgs: ## git commit messages を lint
+	@echo 'TODO( コミットメッセージを lint する script の用意 )'
+
 ################################################################################
 # Utility-Command help
 ################################################################################
