@@ -1,0 +1,54 @@
+#
+# ドキュメントを GitHub Pages に deploy する
+#
+---
+name: Deploy docs
+
+'on':
+  push:
+#  workflow_run:
+#    workflows:
+#      - Lint
+#    types:
+#      - completed
+
+jobs:
+  #
+  # 静的ページを build
+  #
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: リポジトリのチェックアウト
+        uses: actions/checkout@v3
+      - name: nodejsのセットアップ
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - name: 依存ライブラリのインストール
+        run: npm install
+        working-directory: ./docs
+      - name: npm run build
+        run: npm run build
+        working-directory: ./docs
+      - name: build 結果をを成果物 ( アーティファクト ) にする
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: ./docs/build/
+
+  #
+  # GitHub Pages にデプロイ
+  #
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 成果物 ( アーティファクト ) を GitHub Pages にデプロイ
+        id: deployment
+        uses: actions/deploy-pages@v1
