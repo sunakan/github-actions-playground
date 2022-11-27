@@ -13,9 +13,12 @@
 # - TO_COMMIT_ID: lint 対象の commit message の to
 #
 
-readonly WORKING_DIR_PATH=$(pwd)
-readonly LOCAL_MAIN_BRANCH_LATEST_COMMIT_ID="$(git log -n 1 --pretty=%H main)"
-readonly CURRENT_BRANCH_LATEST_COMMIT_ID="$(git log -n 1 --pretty=%H)"
+WORKING_DIR_PATH="$(pwd)"
+LOCAL_MAIN_BRANCH_LATEST_COMMIT_ID="$(git log -n 1 --pretty=%H main)"
+CURRENT_BRANCH_LATEST_COMMIT_ID="$(git log -n 1 --pretty=%H)"
+readonly WORKING_DIR_PATH
+readonly LOCAL_MAIN_BRANCH_LATEST_COMMIT_ID
+readonly CURRENT_BRANCH_LATEST_COMMIT_ID
 
 # ブランチ名の '/' は '--' に置換
 readonly current_branch_name=${CURRENT_BRANCH_NAME:-$(git rev-parse --abbrev-ref HEAD | sed 's/\//--/g')}
@@ -44,9 +47,9 @@ function textlint() {
   readonly tmp_branch_dir_path="${WORKING_DIR_PATH}/tmp/BRANCH_${current_branch_name}"
   rm -rf "$tmp_branch_dir_path"
   mkdir -p "$tmp_branch_dir_path"
-  while read commit_id; do
+  while read -r commit_id; do
     git log -n 1 "$commit_id" --pretty=%B > "${tmp_branch_dir_path}/COMMIT_$(git log -n 1 "$commit_id" --pretty=format:'%cd_%h' --date=format:'%Y-%m-%dT%H:%M:%S').md"
-  done < <(git rev-list ${from_commit_id}..)
+  done < <(git rev-list "${from_commit_id}"..)
 
   TEXTLINT_FOR_GIT="true" npx textlint --config "${WORKING_DIR_PATH}/.textlintrc.js" "${tmp_branch_dir_path}/*.md"
 }
@@ -59,25 +62,25 @@ function reportResult() {
   echo '📝 Result: lint git commit messages'
   echo '---------------------------------------------------'
 
-  if [ $commitlint_exit_code -eq 0 ]; then
+  if [ "$commitlint_exit_code" -eq 0 ]; then
     echo '✅ Passed: commitlint'
   else
     echo '👺 Failed: commitlint'
   fi
-  if [ $textlint_exit_code -eq 0 ]; then
+  if [ "$textlint_exit_code" -eq 0 ]; then
     echo '✅ Passed: textlint'
   else
     echo '👺 Failed: textlint'
   fi
 
 
-  if [ $commitlint_exit_code -ne 0 ]; then
+  if [ "$commitlint_exit_code" -ne 0 ]; then
     echo ''
     echo '[commitlint]'
     echo '👺 help url を参考に commit message を修正してください'
     echo "Try to run: \`git commit --amend\` or \`git rebase -i $LOCAL_MAIN_BRANCH_LATEST_COMMIT_ID\`"
   fi
-  if [ $textlint_exit_code -ne 0 ]; then
+  if [ "$textlint_exit_code" -ne 0 ]; then
     echo ''
     echo '[textlint]'
     echo '👺 指摘された commit message を修正してください'
@@ -100,7 +103,7 @@ function main() {
   readonly textlint_exit_code=$?
 
   reportResult
-  [[ $commitlint_exit_code = 0 ]] && [[ $textlint_exit_code = 0 ]]
+  [[ "$commitlint_exit_code" = 0 ]] && [[ "$textlint_exit_code" = 0 ]]
 }
 
 cat << COMMAND_BEGIN
@@ -113,7 +116,7 @@ TO COMMIT ID:    $to_commit_id
 ---------------------------------------------------
 COMMAND_BEGIN
 
-if [ $current_branch_name = 'main' ]; then
+if [ "$current_branch_name" = 'main' ]; then
   echo '現在のブランチが "main" なので、 lint を skip します'
   exit 0
 fi
