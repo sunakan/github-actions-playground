@@ -6,6 +6,10 @@ setup: ## 開発環境を setup
 lint.commit-msgs: ## git commit messages を lint
 	@bash scripts/lint-git-commit-messages.sh
 
+.PHONY: lint.shell
+lint.shell: ## shell script を lint
+	docker run --rm --mount type=bind,source=${PWD}/,target=/mnt koalaman/shellcheck:stable **/*.sh
+
 ################################################################################
 # Utility-Command help
 ################################################################################
