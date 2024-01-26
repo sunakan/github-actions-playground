@@ -1,0 +1,28 @@
+---
+
+name: re-check-ref-after-check-ref
+permissions:
+  contents: read
+'on':
+  workflow_dispatch:
+  workflow_run:
+    workflows:
+      - 'check-ref'
+    types:
+      - completed
+
+jobs:
+  on-success:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - run: echo "hello"
+      - run: echo "${GITHUB_REF}"
+      - run: echo '----'
+      - run: echo ${{ github.ref }}
+      - run: echo '----'
+      - run: echo ${{ github.ref_name }}
+      - run: echo '----'
+      - run: echo ${{ github.base_ref }}
+      - run: echo '----'
+      - run: echo "hello"
